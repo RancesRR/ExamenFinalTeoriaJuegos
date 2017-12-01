@@ -13,6 +13,7 @@ protected:
 	int _screenIndex = 1;
 	ScreenState _currentState = ScreenState::NONE;
 	Game* _game = nullptr;
+	int puntajeFinal;
 public:
 	friend class ScreenList;
 	virtual void checkInput() = 0;
@@ -40,6 +41,21 @@ public:
 		_game = game;
 	}
 	
+	void setPuntajeFinal(int puntajeNuevo) {
+		puntajeFinal = puntajeNuevo;
+	}
+
+	int getPuntajeFinal() {
+		return puntajeFinal;
+	}
+
+	void resetIndex() {
+		_screenIndex = 1;
+	}
+
+	int getIndex() {
+		return _screenIndex;
+	}
 };
 
 

@@ -2,10 +2,10 @@
 
 
 
-EnemyShip::EnemyShip(float agent_width, float agent_height, glm::vec2 position, std::string texture)
+EnemyShip::EnemyShip(float agent_width, float agent_height, glm::vec2 position, std::string texture, int alienType)
 	:Ship(agent_width,agent_height,position,texture),_elapsed(0)
 {
-	
+	this->alienType = alienType;
 }
 
 void EnemyShip::update(float deltaTime) {
@@ -26,4 +26,8 @@ bool EnemyShip::colision(Vullet* bullet) {
 
 EnemyShip::~EnemyShip()
 {
+}
+
+int EnemyShip::getAlienType() {
+	return alienType;
 }

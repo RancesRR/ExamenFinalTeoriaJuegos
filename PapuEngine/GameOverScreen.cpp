@@ -1,19 +1,24 @@
-#include "MenuScreen.h"
+#include "GameOverScreen.h"
 #include "ScreenIndices.h"
 #include "Game.h"
 #include <iostream>
 
-MenuScreen::MenuScreen(Window* window) :
+
+GameOverScreen::GameOverScreen(Window* window) :
 	_window(window), btnGameClicked(false)
 {
 	_screenIndex = SCREEN_INDEX_MENU;
 }
 
-void MenuScreen::initGUI() {
+void GameOverScreen::initGUI() {
 
 }
 
-void MenuScreen::initSystem() {
+GameOverScreen::~GameOverScreen()
+{
+}
+
+void GameOverScreen::initSystem() {
 	_program.compileShaders("Shaders/colorShaderVert.txt",
 		"Shaders/colorShaderFrag.txt");
 	_program.addAtribute("vertexPosition");
@@ -22,47 +27,45 @@ void MenuScreen::initSystem() {
 	_program.linkShader();
 }
 
-MenuScreen::~MenuScreen()
+void GameOverScreen::build()
 {
 }
 
-void MenuScreen::build()
-{
-}
-
-void MenuScreen::destroy() {
+void GameOverScreen::destroy() {
 	delete _background;
 	delete _button;
 }
 
-void MenuScreen::onExit() {
+void GameOverScreen::onExit() {
 
 }
 
-void MenuScreen::onEntry() {
+void GameOverScreen::onEntry() {
 	initSystem();
 	_camera2D.init(_window->getScreenWidth(), _window->getScreenHeight());
 	_camera2D.setPosition(glm::vec2(_window->getScreenWidth() / 2.0f, _window->getScreenHeight() / 2.0f));
 	_spriteBacth.init();
-	_background = new Background("Textures/naves/menu.png");
+	_background = new Background("Textures/naves/gam-over.png");
 	_button = new Button("Textures/naves/menu_button.png");
 	_spriteFont = new SpriteFont("Fonts/arial.ttf", 64);
 }
 
-void MenuScreen::update() {
+void GameOverScreen::update() {
 	_camera2D.update();
 	if (_game->_inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 		if (_button->clicked(_game->_inputManager.getMouseCoords()) && !btnGameClicked) {
 			btnGameClicked = true;
-			std::cout << "Button clicked" << std::endl;
+			std::cout << "Go to menu" << std::endl;
+			
 			_currentState = ScreenState::CHANGE_NEXT;
+
 		}
 	}
 	checkInput();
 }
 
-void MenuScreen::draw() {
-	
+void GameOverScreen::draw() {
+
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	_program.use();
@@ -76,14 +79,14 @@ void MenuScreen::draw() {
 
 	GLuint imageLocation = _program.getUniformLocation("myImage");
 	glUniform1i(imageLocation, 0);
-	
+
 	_spriteBacth.begin();
-	
+
 	_background->draw(_spriteBacth);
 	_button->draw(_spriteBacth);
-	
+
 	drawText();
-	
+
 	_spriteBacth.end();
 	_spriteBacth.renderBatch();
 
@@ -91,30 +94,27 @@ void MenuScreen::draw() {
 	_program.unuse();
 }
 
-int MenuScreen::getNextScreen()const {
-	return SCREEN_INDEX_GAMEPLAY;
+int GameOverScreen::getNextScreen()const {
+	return SCREEN_INDEX_MENU;
 }
 
-int MenuScreen::getPreviousScreen() const {
-	return SCREEN_INDEX_NO_SCREEN;
+int GameOverScreen::getPreviousScreen() const {
+	return SCREEN_INDEX_MENU;
 }
 
-void MenuScreen::checkInput() {
+void GameOverScreen::checkInput() {
 	SDL_Event evnt;
 	while (SDL_PollEvent(&evnt)) {
 		_game->onSDLEvent(evnt);
 	}
 }
 
-void MenuScreen::drawText() {
+void GameOverScreen::drawText() {
 
 	char buffer[256];
 
-	sprintf_s(buffer, "Examen Final Bica Corazon");
+	sprintf_s(buffer, "Game Over");
 	_spriteFont->draw(_spriteBacth, buffer, glm::vec2(0, 36),
 		glm::vec2(0.5), 0.0f, ColorRGBA(0, 255, 255, 255));
 
-	sprintf_s(buffer, "Rances Renato Ramos Ramirez");
-	_spriteFont->draw(_spriteBacth, buffer, glm::vec2(0, 0),
-		glm::vec2(0.5), 0.0f, ColorRGBA(0, 0, 255, 255));
 }
