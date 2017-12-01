@@ -26,7 +26,7 @@ MenuScreen::~MenuScreen()
 {
 }
 
-void MenuScreen::build() 
+void MenuScreen::build()
 {
 }
 
@@ -46,6 +46,7 @@ void MenuScreen::onEntry() {
 	_spriteBacth.init();
 	_background = new Background("Textures/naves/menu.png");
 	_button = new Button("Textures/naves/menu_button.png");
+	_spriteFont = new SpriteFont("Fonts/arial.ttf", 64);
 }
 
 void MenuScreen::update() {
@@ -62,6 +63,7 @@ void MenuScreen::update() {
 }
 
 void MenuScreen::draw() {
+	
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	_program.use();
@@ -75,11 +77,14 @@ void MenuScreen::draw() {
 
 	GLuint imageLocation = _program.getUniformLocation("myImage");
 	glUniform1i(imageLocation, 0);
-
+	
 	_spriteBacth.begin();
+	
 	_background->draw(_spriteBacth);
 	_button->draw(_spriteBacth);
-
+	
+	drawText();
+	
 	_spriteBacth.end();
 	_spriteBacth.renderBatch();
 
@@ -91,7 +96,7 @@ int MenuScreen::getNextScreen()const {
 	return SCREEN_INDEX_GAMEPLAY;
 }
 
-int MenuScreen::getPreviousScreen() const{
+int MenuScreen::getPreviousScreen() const {
 	return SCREEN_INDEX_NO_SCREEN;
 }
 
@@ -102,4 +107,15 @@ void MenuScreen::checkInput() {
 	}
 }
 
+void MenuScreen::drawText() {
 
+	char buffer[256];
+
+	sprintf_s(buffer, "Examen Final Bica Corazon");
+	_spriteFont->draw(_spriteBacth, buffer, glm::vec2(0, 36),
+		glm::vec2(0.5), 0.0f, ColorRGBA(0, 255, 255, 255));
+
+	sprintf_s(buffer, "Rances Renato Ramos Ramirez");
+	_spriteFont->draw(_spriteBacth, buffer, glm::vec2(0, 0),
+		glm::vec2(0.5), 0.0f, ColorRGBA(0, 0, 255, 255));
+}

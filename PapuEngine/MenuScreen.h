@@ -6,6 +6,7 @@
 #include "Camera2D.h"
 #include "Button.h"
 #include "SpriteBacth.h"
+#include "SpriteFont.h"
 
 class MenuScreen : public IGameScreen
 {
@@ -17,7 +18,8 @@ private:
 	Camera2D _camera2D;
 	Background* _background;
 	Button* _button;
-
+	SpriteFont* _spriteFont;
+	void drawText();
 public:
 	MenuScreen(Window* window);
 	virtual void build() override;
@@ -34,4 +36,3 @@ public:
 	virtual void checkInput() override;
 	~MenuScreen();
 };
-
